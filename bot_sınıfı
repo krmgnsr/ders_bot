@@ -1,0 +1,48 @@
+import discord
+import random
+import os
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Merhaba {bot.user}! Ben bir botum!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def topla(ctx, birinci=0, ikinci=0):
+    await ctx.send(str(birinci+ikinci))
+
+@bot.command(description='For when you wanna settle the score some other way')
+async def choose(ctx, *choices: str):
+    """Chooses between multiple choices."""
+    await ctx.send(random.choice(choices))    
+
+@bot.command()
+async def meme(ctx):
+    img_name = random.choice(os.listdir('images2'), weigth=(40, 10, 50))
+    with open(f'images2/{img_name}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
+
+
+@bot.command()
+async def nature(ctx):
+    rastgele = (0, 1, 2, 3, 4)
+    num = random.choice(rastgele)
+    with open(f'bilgiler.txt', 'r', encoding='utf-8') as f:
+        dosya = f.read()
+        liste = dosya.split("\n")
+        await ctx.send(liste[num])
+    
